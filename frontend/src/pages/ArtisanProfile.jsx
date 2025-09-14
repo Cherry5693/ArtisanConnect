@@ -79,7 +79,7 @@ const ArtisanProfile = () => {
     <div className="max-w-4xl mx-auto py-8 px-4">
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>{artisan.businessName || artisan.name}</CardTitle>
+                    <CardTitle>{artisan.artisanName}</CardTitle>
           <CardDescription>{artisan.role}</CardDescription>
         </CardHeader>
         <CardContent>

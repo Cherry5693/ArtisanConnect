@@ -43,10 +43,16 @@ export default function RecommendedList({ user, location }) {
 
   if (!recommended.length) return null;
 
+  const gridStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))',
+    gap: 16
+  };
+
   return (
     <section style={{ marginTop: 24 }}>
       <h3>Recommended for you</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: 16 }}>
+      <div style={gridStyle}>
         {recommended.map(p => (
           <div key={p._id} style={{ border: '1px solid #eee', borderRadius: 8, padding: 12 }}>
             <div style={{ fontWeight: 600 }}>{p.name}</div>

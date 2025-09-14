@@ -26,7 +26,7 @@ const checkMxRecords = (email) => {
 exports.register = async (req, res) => {
   try {
     console.log('Received registration request body:', req.body);
-    const { name, email, password, role, address } = req.body;
+    const { name, email, password, role, address, businessName } = req.body;
     // Basic required checks for top-level fields only
     if (!name || !email || !password || !role) {
       return res.status(400).json({ msg: 'Please enter all required fields.' });
@@ -71,7 +71,7 @@ exports.register = async (req, res) => {
       userData = {
         email,
         password: hashedPassword,
-        artisanName: name, // Use name for artisanName
+        artisanName: businessName, // Use businessName for artisanName
         address: safeAddress,
         role,
         otp,

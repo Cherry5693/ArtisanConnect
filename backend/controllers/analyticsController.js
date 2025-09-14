@@ -85,6 +85,6 @@ exports.getArtisanAnalytics = async (req, res) => {
 
   } catch (err) {
     console.error('Error fetching artisan analytics:', err);
-    res.status(500).json({ msg: 'Server Error' });
+    res.status(500).json({ msg: err.message || 'Server Error' });
   }
 };

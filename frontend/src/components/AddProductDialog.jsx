@@ -113,6 +113,26 @@ const AddProductDialog = ({ isOpen, onClose, productToEdit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Client-side validation for numeric fields
+    if (isNaN(Number(formData.pricePerKg)) || Number(formData.pricePerKg) <= 0) {
+      toast({ title: "Validation Error", description: "Price per unit must be a positive number.", variant: "destructive" });
+      return;
+    }
+    if (isNaN(Number(formData.minOrderQty)) || Number(formData.minOrderQty) <= 0) {
+      toast({ title: "Validation Error", description: "Minimum order quantity must be a positive number.", variant: "destructive" });
+      return;
+    }
+    if (isNaN(Number(formData.availableQty)) || Number(formData.availableQty) < 0) {
+      toast({ title: "Validation Error", description: "Available quantity must be a non-negative number.", variant: "destructive" });
+      return;
+    }
+    if (!formData.category) {
+      toast({ title: "Validation Error", description: "Please select a category.", variant: "destructive" });
+      return;
+    }
+
+
     const formDataToSend = new FormData();
     formDataToSend.append('name', formData.name);
     formDataToSend.append('description', formData.description);
@@ -127,6 +147,14 @@ const AddProductDialog = ({ isOpen, onClose, productToEdit }) => {
     } else if (formData.imageUrl) { // If no new image, but existing imageUrl, send it
       formDataToSend.append('imageUrl', formData.imageUrl);
     }
+    // Append shipping details only if they are not empty
+    if (formData.shippingZones) {
+      formDataToSend.append('shippingZones', formData.shippingZones);
+    }
+    if (formData.shippingCost) {
+      formDataToSend.append('shippingCost', formData.shippingCost);
+    }
+
     submitProduct(formDataToSend);
   };
 
