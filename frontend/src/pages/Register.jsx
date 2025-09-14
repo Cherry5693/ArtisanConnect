@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,7 +12,7 @@ import riderImg from '../assets/rider.png';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: '', email: '', password: '', confirmPassword: '', role: 'vendor',
+    name: '', email: '', password: '', confirmPassword: '', role: 'buyer',
     businessName: '', address: { street: '', city: '', state: '', zipCode: '' },
   });
   const [otp, setOtp] = useState('');
@@ -155,20 +155,20 @@ const Register = () => {
     {step === 'register' ? (
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="grid grid-cols-2 gap-2">
-          <div className={`flex items-center justify-center gap-2 rounded-md border p-2 cursor-pointer select-none text-sm ${formData.role === 'vendor' ? 'border-red-500 bg-red-50 shadow-sm' : 'border-transparent bg-white/60'}`} 
-               onClick={() => handleInputChange('role', 'vendor')}>
+          <div className={`flex items-center justify-center gap-2 rounded-md border p-2 cursor-pointer select-none text-sm ${formData.role === 'buyer' ? 'border-red-500 bg-red-50 shadow-sm' : 'border-transparent bg-white/60'}`} 
+               onClick={() => handleInputChange('role', 'buyer')}>
             <div className="w-3 h-3 rounded-full bg-red-500" />
             <span>Buyer</span>
           </div>
-          <div className={`flex items-center justify-center gap-2 rounded-md border p-2 cursor-pointer select-none text-sm ${formData.role === 'supplier' ? 'border-red-500 bg-red-50 shadow-sm' : 'border-transparent bg-white/60'}`} 
-               onClick={() => handleInputChange('role', 'supplier')}>
+          <div className={`flex items-center justify-center gap-2 rounded-md border p-2 cursor-pointer select-none text-sm ${formData.role === 'artisan' ? 'border-red-500 bg-red-50 shadow-sm' : 'border-transparent bg-white/60'}`} 
+               onClick={() => handleInputChange('role', 'artisan')}>
             <div className="w-3 h-3 rounded-full bg-amber-400" />
             <span>Artisan</span>
           </div>
         </div>
 
         <div className="space-y-1"><Label htmlFor="name">Full Name</Label><Input id="name" value={formData.name} onChange={(e) => handleInputChange('name', e.target.value)} required /></div>
-        {formData.role === 'supplier' && <div className="space-y-1"><Label htmlFor="businessName">Business Name</Label><Input id="businessName" value={formData.businessName} onChange={(e) => handleInputChange('businessName', e.target.value)} required /></div>}
+        {formData.role === 'artisan' && <div className="space-y-1"><Label htmlFor="businessName">Business Name</Label><Input id="businessName" value={formData.businessName} onChange={(e) => handleInputChange('businessName', e.target.value)} required /></div>}
 
         <div className="space-y-1">
           <Label htmlFor="email">Email</Label>
