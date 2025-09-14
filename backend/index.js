@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const routes = require('./routes/route');
+const recRoutes = require('./routes/recoRoutes');
 
 // Load env vars
 dotenv.config({ path: './backend/.env' }); // Specify the path to .env
@@ -30,6 +31,7 @@ console.log(`CORS allowed origin: ${allowedOrigin}`);
 
 // Mount routers
 app.use('/api', routes);
+app.use('/api',recRoutes)
 
 const PORT = process.env.PORT || 5000;
 

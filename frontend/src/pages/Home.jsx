@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
+import RecommendedList from '@/components/RecommendedList'; // ✅ Added
 
 const Home = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth(); // ✅ include user
+
+  // ✅ Example location (can replace with geolocation later)
+  const location = { lat: 28.6139, lon: 77.2090 };
 
   return (
     <div
@@ -15,7 +19,7 @@ const Home = () => {
       style={{
         backgroundImage:
           "url('https://wallpapers.com/images/hd/food-delivery-green-poster-oi97lp6ogs4prjzx.jpg')",
-          backgroundAttachment: 'fixed',
+        backgroundAttachment: 'fixed',
       }}
     >
       <div
@@ -48,8 +52,7 @@ const Home = () => {
           </h1>
 
           <p className="mt-2 text-lg sm:text-xl text-gray-700 max-w-2xl">
-            <span className="font-semibold text-gray-800">Artisans</span> and <span className="font-semibold text-gray-800">buyers</span> —
-            united in a vibrant marketplace. Explore, order, and scale your business with ease.
+            <span className="font-semibold text-gray-800">Artisans</span> and <span className="font-semibold text-gray-800">buyers</span> — united in a vibrant marketplace. Explore, order, and scale your business with ease.
           </p>
         </div>
 
@@ -89,6 +92,14 @@ const Home = () => {
         <p className="mt-12 text-sm text-gray-600">
           Elevate your craft. Simplify your sales. Experience the future of artisan commerce.
         </p>
+
+        {/* ✅ Recommendations section */}
+        {isAuthenticated && (
+          <div className="relative z-10 mt-16 text-left">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Recommended for you</h2>
+            <RecommendedList user={user} location={location} />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -18,7 +18,17 @@ import {
 import { useToast } from './ui/use-toast';
 import { Loader2, PlusCircle } from 'lucide-react';
 
-const categories = ["Vegetables", "Grains", "Oils", "Spices", "Dairy", "Pulses", "Prepared", "Other"];
+const categories = [
+  "Handwoven Textiles",
+  "Pottery & Ceramics",
+  "Jewelry & Accessories",
+  "Woodcraft & Bamboo",
+  "Leather & Handbags",
+  "Home Décor & Furnishings",
+  "Traditional Paintings & Art",
+  "Eco-friendly & Recycled Products",
+  "Other"
+];
 const units = ["kg", "litre", "piece", "packet", "box"];
 
 const AddProductDialog = ({ isOpen, onClose, productToEdit }) => {
@@ -156,11 +166,11 @@ const AddProductDialog = ({ isOpen, onClose, productToEdit }) => {
       </div>
     </div>
     <div>
-      {/* <Label htmlFor="category" className="font-semibold text-gray-700">Category</Label>
+      <Label htmlFor="category" className="font-semibold text-gray-700">Category</Label>
       <select id="category" name="category" value={formData.category} onChange={handleChange} className="mt-1 px-2 py-1 sm:px-3 sm:py-2 w-full rounded-lg border focus:outline-none focus:ring-2 focus:ring-green-400 transition">
         <option value="">Select category</option>
         {categories.map(c => <option key={c} value={c}>{c}</option>)}
-      </select> */}
+      </select>
     </div>
     <div className="grid grid-cols-2 gap-2 sm:gap-3">
       <div>
