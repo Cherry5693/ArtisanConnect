@@ -35,7 +35,7 @@ exports.getArtisanAnalytics = async (req, res) => {
           totalRevenue: {
             $sum: {
               $multiply: [
-                '$currentQty',
+                '$quantity',
                 { $ifNull: ['$product.pricePerKg', 0] }
               ]
             }
@@ -74,7 +74,7 @@ exports.getArtisanAnalytics = async (req, res) => {
         $group: {
           _id: '$product._id',
           name: { $first: '$product.name' },
-          totalQuantitySold: { $sum: '$currentQty' }
+          totalQuantitySold: { $sum: '$quantity' }
         }
       },
       { $sort: { totalQuantitySold: -1 } },

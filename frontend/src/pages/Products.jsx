@@ -321,7 +321,7 @@ const Products = () => {
                   </CardContent>
                 </Link>
 
-                {(!user || user.role !== 'supplier') && (
+                {(!user || user.role !== 'artisan') && (
                   <CardContent className="pt-0">
                     <Button
                       className="w-full bg-green-600 hover:bg-green-700 text-white rounded-lg"

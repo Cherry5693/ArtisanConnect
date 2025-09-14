@@ -68,9 +68,10 @@ const ArtisanDashboard = () => {
 
   const openOrders = directOrders.filter((order) => order.status === 'open');
   const approvedOrders = directOrders.filter((order) => order.status === 'approved');
-  const completedOrders = directOrders.filter(
-    (order) => order.status === 'completed' || order.status === 'delivered'
-  );
+  const completedOrders = directOrders
+    .filter((order) => order.status === 'completed' || order.status === 'delivered')
+    .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  const recentCompletedOrders = completedOrders.slice(0, 5);
 
   return (
     <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -235,9 +236,14 @@ const ArtisanDashboard = () => {
      <div className="w-full px-3 sm:px-0 xxl:px-8 mb-8">
           <div className="w-full px-4 sm:px-0 xxl:px-8">
          <Card className="w-full max-w-40xl mx-auto">
-            <CardHeader>
-              <CardTitle>Completed Direct Orders</CardTitle>
-              <CardDescription>Direct orders that have been successfully delivered.</CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Completed Direct Orders</CardTitle>
+                <CardDescription>Recently completed direct orders.</CardDescription>
+              </div>
+              <Link to="/completed-orders">
+                <Button variant="outline">View All</Button>
+              </Link>
             </CardHeader>
             <CardContent>
               {isLoadingOrders ? (
@@ -246,7 +252,7 @@ const ArtisanDashboard = () => {
                 </div>
               ) : isOrdersError ? (
                 <p className="text-destructive text-center py-4">Error loading orders.</p>
-              ) : completedOrders.length > 0 ? (
+              ) : recentCompletedOrders.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -260,7 +266,7 @@ const ArtisanDashboard = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {completedOrders.map((order) => (
+                    {recentCompletedOrders.map((order) => (
                       <TableRow key={order._id}>
                         <TableCell className="font-medium">{order.productId?.name || 'N/A'}</TableCell>
                         <TableCell>{order.buyer?.name || 'N/A'}</TableCell>

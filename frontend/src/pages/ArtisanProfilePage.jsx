@@ -121,7 +121,7 @@ const ArtisanProfilePage = () => {
             <CardContent className="space-y-4">
               <div>
                 <p className="text-muted-foreground">Name:</p>
-                <p className="text-lg font-medium">{user.name}</p>
+                <p className="text-lg font-medium">{user.artisanName}</p>
               </div>
               <div>
                 <p className="text-muted-foreground">Email:</p>
