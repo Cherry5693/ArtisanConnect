@@ -1,3 +1,4 @@
+
 // frontend/src/components/RecommendedList.jsx
 import { useEffect, useState } from 'react';
 import { getRecommendations } from '@/services/recoService';           // use alias for consistency
