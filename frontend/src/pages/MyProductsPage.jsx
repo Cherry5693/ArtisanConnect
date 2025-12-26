@@ -54,7 +54,7 @@ const MyProductsPage = () => {
         </div>
         <Button
           onClick={() => setIsAddProductDialogOpen(true)}
-          className="bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white shadow-lg transition-all transform hover:scale-105"
+          className="shadow-lg transform hover:scale-105 bg-gradient-to-r from-green-500 to-green-600 text-white"
         >
           Add New Product
         </Button>

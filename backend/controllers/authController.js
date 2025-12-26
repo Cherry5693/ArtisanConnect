@@ -181,11 +181,14 @@ exports.login = async (req, res) => {
 exports.verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
+    console.log('Verify OTP request body:', req.body);
     
     let user = await BuyerUser.findOne({ email });
     if (!user) {
       user = await ArtisanUser.findOne({ email });
     }
+
+    console.log('Verify OTP - user found:', user ? ({ email: user.email, isVerified: user.isVerified, otp: user.otp }) : 'None');
 
     if (!user) {
       return res.status(400).json({ msg: 'User not found.' });
@@ -269,7 +272,7 @@ exports.resetPassword = async (req, res) => {
 
     if (user.otp !== otp || user.otpExpires < Date.now()) {
       return res.status(400).json({ msg: 'Invalid or expired OTP' });
-    }
+    } 
 
     const hashedPassword = await bcrypt.hash(password, 10);
     

@@ -104,21 +104,39 @@ FormLabel.displayName = "FormLabel"
 const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
+>(({ children, ...props }, ref) => {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
+
+  // If user provided children, ensure there's exactly one child element for Slot
+  if (children !== undefined) {
+    try {
+      React.Children.only(children)
+    } catch (err) {
+      console.warn("FormControl expects a single child element when used to wrap a control. Falling back to wrapper. Received:", children)
+      return (
+        <div
+          ref={ref as any}
+          id={formItemId}
+          aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
+          aria-invalid={!!error}
+          {...props}
+        >
+          {children}
+        </div>
+      )
+    }
+  }
 
   return (
     <Slot
       ref={ref}
       id={formItemId}
-      aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
-      }
+      aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
       aria-invalid={!!error}
       {...props}
-    />
+    >
+      {children}
+    </Slot>
   )
 })
 FormControl.displayName = "FormControl"

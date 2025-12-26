@@ -131,7 +131,13 @@ const ProductDetail = () => {
                 {/* Action Buttons */}
                 {user?.role !== 'artisan' && product.artisan && (
                   <div className="mt-6 flex flex-col md:flex-row gap-3">
-                    <Button onClick={handleChatClick} className="w-full md:w-1/2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg transition-all">{chatLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : 'Chat with Artisan'}</Button>
+                    <Button
+                      onClick={handleChatClick}
+                      isLoading={chatLoading}
+                      className="w-full md:w-1/2 bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                    >
+                      Chat with Artisan
+                    </Button>
                     <Button onClick={handleOrderClick} className="w-full md:w-1/2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg transition-all">Order</Button>
                     {chatError && <p className="text-destructive text-sm mt-2">{chatError}</p>}
                   </div>

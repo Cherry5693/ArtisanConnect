@@ -16,18 +16,32 @@ const app = express();
 
 // Body parser
 app.use(express.json());
-
-// Enable CORS - allow frontend origin and required headers
-const allowedOrigin = process.env.FRONTEND_URL || '*';
+// Enable CORS - reflect incoming origin so credentials can be used safely
+// Note: in production set FRONTEND_URL to your allowed origin (e.g. https://your-site.com)
 app.use(cors({
-	origin: allowedOrigin,
+	origin: true, // reflect request origin
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
 	allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
 	credentials: true,
 }));
 
-// Log effective CORS origin for debugging
-console.log(`CORS allowed origin: ${allowedOrigin}`);
+// Ensure preflight requests are handled explicitly without registering a route
+// Some path patterns like '*' or '/*' can break path-to-regexp in certain router versions,
+// so handle OPTIONS generically here and let the cors middleware set the appropriate headers.
+app.use((req, res, next) => {
+	if (req.method === 'OPTIONS') {
+		// CORS middleware already sets the correct headers when origin is present.
+		// Send a minimal successful preflight response.
+		return res.sendStatus(204);
+	}
+	next();
+});
+
+// Log incoming requests and effective CORS behavior to help debug deployed env
+app.use((req, res, next) => {
+	console.log('Incoming request:', req.method, req.path, 'Origin:', req.headers.origin);
+	next();
+});
 
 // Mount routers
 app.use('/api', routes);

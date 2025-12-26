@@ -40,17 +40,160 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      isLoading = false,
+      disabled,
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const isDisabled = disabled || isLoading
+    const baseClass = cn(
+      buttonVariants({ variant, size }),
+      "transition-transform duration-150 will-change-transform",
+      "active:translate-y-0.5 active:scale-[0.995]", // subtle press effect
+      "focus-visible:ring-4 focus-visible:ring-primary/40 focus-visible:ring-offset-2",
+      isLoading && "opacity-90 pointer-events-none",
+      className
+    )
+
+    // If used with `asChild`, clone the single element child and merge props.
+    // Also prepend the spinner into the child's children (so the Slot still has only one child).
+    if (asChild) {
+      let child: React.ReactElement | null = null
+      try {
+        child = React.Children.only(children) as React.ReactElement
+      } catch (err) {
+        console.warn("Button (asChild) expects a single React element child. Falling back to Slot rendering.")
+        // Fallback: render a Slot to avoid further runtime errors (keep UI working)
+        const Comp = Slot
+        return (
+          <Comp
+            className={baseClass}
+            ref={ref as any}
+            {...props}
+            disabled={isDisabled}
+            aria-busy={isLoading}
+          >
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />}
+            {children}
+          </Comp>
+        )
+      }
+
+      const spinner = isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> : null
+      // Merge className & props into child; ensure disabled/aria-busy are set
+      const mergedClassName = cn(child.props?.className, baseClass)
+      const mergedProps = {
+        ref,
+        className: mergedClassName,
+        disabled: isDisabled || child.props?.disabled,
+        "aria-busy": isLoading || child.props?.["aria-busy"],
+        ...props,
+      }
+
+      // Preserve child's original children and prepend spinner if required
+      const childChildren = child.props?.children
+      const newChildren = spinner ? (<>{spinner}{childChildren}</>) : childChildren
+
+      return React.cloneElement(child, mergedProps, newChildren)
+    }
+
+    // Normal rendering when not using asChild
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+      <button
+        className={baseClass}
         ref={ref}
         {...props}
-      />
+        disabled={isDisabled}
+        aria-busy={isLoading}
+      >
+        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />}
+        {children}
+      </button>
     )
   }
 )
 Button.displayName = "Button"
 
-export { Button, buttonVariants }
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border bg-card text-card-foreground shadow transition-shadow hover:shadow-lg",
+      className
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
+
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6 border-b border-border", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
+
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
+
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Button, buttonVariants, Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

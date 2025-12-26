@@ -47,6 +47,26 @@ const BreadcrumbLink = React.forwardRef<
 >(({ asChild, className, ...props }, ref) => {
   const Comp = asChild ? Slot : "a"
 
+  if (asChild) {
+    const children = (props as any).children
+    try {
+      React.Children.only(children)
+    } catch (err) {
+      console.warn(
+        "BreadcrumbLink (asChild) expects a single React element child. Received:",
+        children
+      )
+      // Fallback to a plain anchor to avoid Slot errors
+      return (
+        <a
+          ref={ref}
+          className={cn("transition-colors hover:text-foreground", className)}
+          {...props}
+        />
+      )
+    }
+  }
+
   return (
     <Comp
       ref={ref}

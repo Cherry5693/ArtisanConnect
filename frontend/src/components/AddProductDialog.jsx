@@ -12,7 +12,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from './ui/dialog';
 import { useToast } from './ui/use-toast';
@@ -160,9 +159,6 @@ const AddProductDialog = ({ isOpen, onClose, productToEdit }) => {
 
   return (
    <Dialog open={isOpen} onOpenChange={onClose}>
-  <DialogTrigger asChild>
-  
-  </DialogTrigger>
   <DialogContent className="bg-gradient-to-r from-green-50 via-white to-gray-50 rounded-xl shadow-2xl border p-6 sm:p-8 w-full max-w-xl mx-auto">
   <DialogHeader>
     <DialogTitle className="text-xl sm:text-1xl font-bold text-green-700">
